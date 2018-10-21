@@ -1,0 +1,96 @@
+﻿
+@{
+    Layout = "~/Views/_Layout_Set.cshtml";
+}
+@section CSS{
+
+}
+<!DOCTYPE html>
+
+<div class="wrapper  animated fadeInUp">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-content" ng-controller="BackgroundJobAddController">
+                    <form class="form-horizontal m-t" id="form" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">名称：</label>
+                            <div class="col-sm-10">
+                                <input id="Name" name="Name" class="form-control" type="text" ng-model="model.Name" data-validation-engine="validate[required]" data-errormessage-value-missing="请输入名称" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">分组：</label>
+                            <div class="col-sm-10">
+                                <input id="GroupName" name="GroupName" class="form-control" type="text" ng-model="model.GroupName" data-validation-engine="validate[required]" data-errormessage-value-missing="请输入分组名称" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">类名：</label>
+                            <div class="col-sm-10">
+                                <input id="ClassName" name="ClassName" class="form-control" type="text" ng-model="model.ClassName" data-validation-engine="validate[required]" data-errormessage-value-missing="请输入类名" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">描述：</label>
+                            <div class="col-sm-10">
+                                <input id="Description" name="Description" class="form-control" type="text" ng-model="model.Description" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Cron表达式：</label>
+                            <div class="col-sm-10">
+                                <input id="CronExpression" name="CronExpression" class="form-control" type="text" ng-model="model.CronExpression" data-validation-engine="validate[required]" data-errormessage-value-missing="请输入Cron表达式" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-primary" type="button" ng-click="SubmitAdd()">提交</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section JS{
+    <script type="text/javascript">
+        function BackgroundJobAddController($scope, $http, $window) {
+            $scope.model = {
+                Name: '',
+                GroupName: '',
+                ClassName: '',
+                Description: '',
+                CronExpression: '',
+            };
+            $scope.SubmitAdd = function () {
+                if (!$('#form').validationEngine('validate')) {
+                    return;
+                }
+                $http({
+                    method: 'POST',
+                    url: '/Job/AddPost?r=' + Math.random(),
+                    data: $scope.model
+                })
+               .success(function (result, status, headers, config) {
+
+                   if (result.success) {
+                       oUtils.alertSuccess('保存成功', function () {
+                           $("#opt_is_success").val('true');
+                           parent.layer.close(parent.layer.getFrameIndex(window.name));
+                       });
+                   } else {
+                       oUtils.alertError('保存失败');
+                   }
+               })
+               .error(function (result, status, headers, config) {
+                   alert(result.message || '操作过程中发生异常');
+               });
+            };
+        };
+    </script>
+}

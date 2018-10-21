@@ -1,0 +1,12 @@
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\QuartzCommon.dll
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\QuartzCommon.pdb
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\log4net.dll
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\Quartz.dll
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\log4net.xml
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\Quartz.pdb
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\Quartz.xml
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\obj\Debug\QuartzCommon.dll
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\obj\Debug\QuartzCommon.pdb
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\System.Web.Mvc.dll
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\System.Web.Mvc.xml
+C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\bin\Debug\zh-Hans\System.Web.Mvc.resources.dll

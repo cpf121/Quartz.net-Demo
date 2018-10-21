@@ -1,0 +1,209 @@
+﻿
+@{
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@section Css{
+    }
+
+<div class="wrapper animated fadeInUp" ng-controller="JobListController">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>任务管理</h5>
+                </div>
+                <div class="ibox-title">
+                    <div class="ibox-tools" style="display: inline-block; float: left">
+                        <a href="javascript:void(0)" class="btn btn-danger  btn-xs btn-delete">删除</a>
+                    </div>
+                    <div class="ibox-tools" style="display: inline-block; float: right">
+                        <a href="javascript:void(0)" data-title="任务创建" class="btn btn-primary btn-xs btn-creat-job">任务创建</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <form role="form" class="form-inline query-container" id="form_search">
+                        <div class="form-group  m-l">
+                            <label for="ClassTaskId" class="sr  m-r-xs">名称</label>
+                            <input type="text" id="Name" name="Name" class="form-control" ng-model="model.Name">
+                        </div>
+                        <button class="btn btn-primary btn-search" type="button">搜索</button>
+                    </form>
+                    <div class="jqGrid_wrapper">
+                        <table id="data_grid"></table>
+                        <div id="grid_pager_bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section JS{
+<script type="text/javascript">
+        $(function () {
+            $('.btn-creat-job').click(function () {
+                oUtils.showIframe({
+                    areaWidth: '700px',
+                    areaHeight: '530px',
+                    Url: '/Job/Add',
+                    title: '后台任务创建',
+                    beforeClose: function (index) {
+                        if (index > 0) {
+                            if (parent != null) {
+                                var opt_is_success = parent.layer.getChildFrame('#opt_is_success', index).val();
+                                if (opt_is_success && typeof (opt_is_success) != 'undefined' && opt_is_success == 'true') {
+                                    $('#data_grid').trigger("reloadGrid");
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+
+            $('.btn-delete').click(function () {
+                var idList = $('#data_grid').jqGrid('getGridParam', 'selarrrow');
+                if (idList != null && idList != '' && idList.length > 0) {
+                    var objArr = [];
+                    for ( var i=0;i<idList.length; i++)
+                    {
+                        var rowData = $("#data_grid").jqGrid('getRowData', idList[i]);
+                        var job = { JobName: rowData.Name, GroupName: rowData.GroupName };
+                        objArr.push(job);
+                    }
+                    if (confirm('确定要删除所选择的行吗？')) {
+                        $.post('/Job/DeleteJob', { idList: objArr }, function (result) {
+                            if (result.success) {
+                                alert('删除成功');
+                                $('#data_grid').trigger("reloadGrid");
+                            } else {
+                                alert(result.message || '操作失败');
+                            }
+                        }, 'json');
+                    }
+                } else {
+                    alert('请勾选要操作的行 ');
+                }
+            })
+        })
+
+
+        function ShowEditFrame(JobName,GroupName) {
+            oUtils.showIframe({
+                areaWidth: '700px',
+                areaHeight: '530px',
+                Url: '/Job/Info?JobName=' + JobName + '&groupName='+GroupName+'&r=' + Math.random(),
+                title: '后台任务编辑',
+                beforeClose: function (index) {
+                    if (index > 0) {
+                        if (parent != null) {
+                            var opt_is_success = parent.layer.getChildFrame('#opt_is_success', index).val();
+                            if (opt_is_success && typeof (opt_is_success) != 'undefined' && opt_is_success == 'true') {
+                                $('#data_grid').trigger("reloadGrid");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function SetState(groupName,jobName, State) {
+            if (confirm('确定要修改当前任务的状态吗？')) {
+                $.post('/Job/UpdateState', { GroupName:groupName,JobName:jobName, State: State }, function (result) {
+                    if (result.success) {
+                        $('#data_grid').trigger("reloadGrid");
+                    } else {
+                        alert(result.message || '操作失败');
+                    }
+                }, 'json');
+            }
+        }
+
+        function JobListController($scope, $http, $window) {
+            var gridId = 'data_grid';
+            $scope.LoadBackgroundJobList = function () {
+                oUtils.jqGrid({
+                    gridId: gridId,
+                    url: '/Job/List?r=' + Math.random(),
+                    dataIdKey: 'JobId',
+                    isPager: true,
+                    colNames: [
+                                "Sched_Name",
+                                "名称",
+                                "分组名",
+                                "状态",
+                                "类名",
+                                "最后运行时间",
+                                "下次运行时间",
+                                "描述",
+                                "Cron表达式",
+                                "Cron表达式描述",
+                                "操作"
+                    ],
+                    colModel: [
+                                { name: "Sched_Name", hidden:true},
+                                { name: "Name", width: 150, index: "Name", sortable: false },
+                                { name: "GroupName", width: 150, index: "GroupName", sortable: false },
+                                { name: "State", width: 105, index: "State", sortable: false },//, formatter: $scope.formatState },
+                                { name: "ClassName", width: 130, index: "ClassName", sortable: false },
+                                { name: "LastRunTime", width: 135, index: "LastRunTime", sortable: false },
+                                { name: "NextRunTime", width: 135, index: "NextRunTime", sortable: false },
+                                { name: "Description", width: 140, index: "Description", sortable: false },
+                                { name: "CronExpression", width: 100, index: "CronExpression", sortable: false },
+                                { name: "CronExpressionDescription", width: 110, index: "CronExpressionDescription", sortable: false },
+                                { name: 'Opration', index: 'Name', width: 120, formatter: $scope.formatModel, edittype: 'custom', hidden: false },
+                    ]
+                });
+            };
+
+            $scope.formatModel = function (cellValue, options, rowObject) {
+                var btns = [];
+                //btns.push('<a href="javascript:void(0);" onclick="ShowEditFrame(\'' + cellValue + '\')" class="btn btn-info  btn-xs" >编辑</a>');
+
+                //0-等待 1-暂停 2-正常执行 3-阻塞 4-错误
+                var State = rowObject.State;
+                if (State == "正常执行") {
+                    btns.push('<a href="javascript:void(0);" onclick="SetState(\'' + rowObject.GroupName + '\',\''+rowObject.Name + '\',2)" class="btn btn-success  btn-xs" >暂停</a>');
+                } else if (State == "暂停") {
+                    btns.push('<a href="javascript:void(0);" onclick="SetState(\'' + rowObject.GroupName + '\',\'' + rowObject.Name + '\',1)" class="btn btn-warning  btn-xs" >启用</a>');
+                } else if (State == "等待") {
+                    btns.push('<a href="javascript:void(0);" onclick="SetState(\'' + rowObject.GroupName + '\',\'' + rowObject.Name + '\',0)" class="btn btn-warning  btn-xs" >开始</a>');
+                }
+                return btns.join('&nbsp;&nbsp;&nbsp;&nbsp;');
+            };
+
+            $scope.formatState = function (cellValue, options, rowObject) {
+                //状态 0-停止  1-运行   3-正在启动中...   5-停止中...
+                var state = rowObject.State;
+                if (state == 0) {
+                    return '<span class="label label-warning">停止</span>';
+                } else if (state == 1) {
+                    return '<span class="label label-primary">运行</span>';
+                } else if (state == 3) {
+                    return '<span class="label label-info">启动中...</span>';
+                } else if (state == 5) {
+                    return '<span class="label label-info">停止中...</span>';
+                } else {
+                    return '<span class="label label-danger">未知</span>';
+                }
+            };
+
+
+            $scope.model = {
+                Name: ''
+            };
+
+            $(function () {
+                $scope.LoadBackgroundJobList();
+
+                $(".query-container .btn-search").click(function () {
+                    var parameter = "";
+                    parameter += 'Name:' + "'" + escape($scope.model.Name) + "'";
+                    oUtils.jqGrid.search(gridId, parameter);
+                });
+            });
+        };
+</script>
+}
+

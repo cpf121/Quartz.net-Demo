@@ -1,0 +1,21 @@
+ERROR 2018-10-15 17:34:30,977 [logerror] 任务调度初始化失败！
+Quartz.SchedulerException: Could not Initialize DataSource: Quartz ---> System.ArgumentOutOfRangeException: There is no metadata information for provider 'SqlServer-20'
+Parameter name: providerName
+   at Quartz.Impl.AdoJobStore.Common.DbProvider.GetDbMetadata(String providerName)
+   at Quartz.Impl.AdoJobStore.Common.DbProvider..ctor(String dbProviderName, String connectionString)
+   at Quartz.Impl.StdSchedulerFactory.<Instantiate>d__65.MoveNext()
+   --- End of inner exception stack trace ---
+   at Quartz.Impl.StdSchedulerFactory.<Instantiate>d__65.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Quartz.Impl.StdSchedulerFactory.<GetScheduler>d__69.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at QuartzCommon.QuartzHelper.<GetScheduler>d__3.MoveNext() in C:\Users\cao.pengfei\Desktop\QuartzDemo\Quartz\QuartzCommon\QuartzHelper.cs:line 44 [See nested exception: System.ArgumentOutOfRangeException: There is no metadata information for provider 'SqlServer-20'
+Parameter name: providerName
+   at Quartz.Impl.AdoJobStore.Common.DbProvider.GetDbMetadata(String providerName)
+   at Quartz.Impl.AdoJobStore.Common.DbProvider..ctor(String dbProviderName, String connectionString)
+   at Quartz.Impl.StdSchedulerFactory.<Instantiate>d__65.MoveNext()]

@@ -1,0 +1,4 @@
+INFO  2018-10-19 09:43:42,587 [loginfo] Data Source = .;Initial Catalog = Quartz;User Id = sa;Password = cl19960426;
+INFO  2018-10-19 09:43:42,648 [loginfo] 任务调度初始化成功
+INFO  2018-10-19 09:43:56,918 [loginfo] 任务调度开始
+INFO  2018-10-19 17:51:37,979 [loginfo] 任务调度停止！
